@@ -5,15 +5,15 @@ module.exports = override(
   fixBabelImports('import', {
     libraryName: 'antd',
     libraryDirectory: 'es',
-    style: true,
+    style: 'css',
   }),
-  addLessLoader({
-    lessOptions: {
-      paths: [path.resolve(__dirname, "src")],
-      javascriptEnabled: true,
-      sourceMap: true
-    }
-  }),
+  // addLessLoader({
+  //   lessOptions: {
+  //     paths: [path.resolve(__dirname, "src")],
+  //     javascriptEnabled: true,
+  //     sourceMap: true
+  //   }
+  // }),
   addWebpackAlias({
     '@': path.resolve(__dirname, "src")
   }),

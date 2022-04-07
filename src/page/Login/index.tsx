@@ -2,14 +2,13 @@ import React from 'react';
 import Particles from "react-tsparticles";
 import params from "./particleOptions";
 import './index.scss'
-import {Button, Form, Input} from "antd";
-import {LockOutlined, UserOutlined} from "@ant-design/icons";
+import {Form, Input} from "antd";
 
 export default function Login(): JSX.Element {
 
-  // 表单完成验证
-  function onFinish() {
-
+  // 表单完成
+  const onFinish = (value: { [prosName: string]: any }) => {
+    console.log('onFinish', value)
   }
 
   return (
@@ -17,30 +16,19 @@ export default function Login(): JSX.Element {
       <Particles id='login-particles' params={params}/>
       <div className='login'>
         <h2 style={{fontSize: '34px', color: '#fff'}}>elm后台管理系统</h2>
-        <Form name='normal_login' className='login-form' initialValues={{remembered: true}} onFinish={onFinish}>
-          <Form.Item
-            name="username"
-            rules={[{required: true, message: 'Please input your Username!'}]}
-          >
-            <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Username"/>
-          </Form.Item>
-          <Form.Item
-            name="password"
-            rules={[{required: true, message: 'Please input your Password!'}]}
-          >
-            <Input
-              prefix={<LockOutlined className="site-form-item-icon"/>}
-              type="password"
-              placeholder="Password"
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" className="login-form-button">
-              Log in
-            </Button>
-            Or <a href="">register now!</a>
-          </Form.Item>
-        </Form>
+        <div className='login-form'>
+          <Form className='el-form' onFinish={onFinish} name='basic'>
+            <Form.Item name='userName' rules={[{required: true, message: 'Please input your username!'}]}>
+              <Input placeholder='用户名'/>
+            </Form.Item>
+            <Form.Item rules={[{required: true, message: 'Please input your password!'}]} name='password'>
+              <Input.Password placeholder='密码'/>
+            </Form.Item>
+            <Form.Item>
+              <button type="submit"><span>登录</span></button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
     </div>
   )
