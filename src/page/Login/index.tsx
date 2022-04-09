@@ -1,14 +1,17 @@
 import React from 'react';
 import Particles from "react-tsparticles";
 import params from "./particleOptions";
-import './index.scss'
 import {Form, Input} from "antd";
+import login from "../../api/login"
+import {ILoginParams} from "../../interface/login";
+import './index.scss'
 
 export default function Login(): JSX.Element {
 
   // 表单完成
-  const onFinish = (value: { [prosName: string]: any }) => {
-    console.log('onFinish', value)
+  const onFinish = async (value: ILoginParams) => {
+    const result = await login().login('/api/admin/login', 'POST', value)
+    console.log(result)
   }
 
   return (
@@ -18,7 +21,7 @@ export default function Login(): JSX.Element {
         <h2 style={{fontSize: '34px', color: '#fff'}}>elm后台管理系统</h2>
         <div className='login-form'>
           <Form className='el-form' onFinish={onFinish} name='basic'>
-            <Form.Item name='userName' rules={[{required: true, message: 'Please input your username!'}]}>
+            <Form.Item name='user_name' rules={[{required: true, message: 'Please input your username!'}]}>
               <Input placeholder='用户名'/>
             </Form.Item>
             <Form.Item rules={[{required: true, message: 'Please input your password!'}]} name='password'>
