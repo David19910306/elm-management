@@ -10,3 +10,11 @@ export default interface ILogin {
   singOut: (url: string, method: 'GET') => AxiosPromise<void>,
   adminInfo: (url: string, method: 'GET') => AxiosPromise<void>
 }
+
+// 定义数据的返回类型
+export interface responseDataType {
+  status: number,
+  message?: string,
+
+  [propertyName: string]: any
+}
