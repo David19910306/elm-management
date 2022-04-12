@@ -1,15 +1,16 @@
 import React, {useState} from 'react'
 import {Breadcrumb, Layout, Menu} from "antd";
+import {Outlet, useNavigate} from 'react-router-dom'
 import {
   EditOutlined,
   ExclamationCircleFilled,
+  HomeOutlined,
   PlusOutlined,
   SettingOutlined,
   SnippetsOutlined,
-  StarOutlined,
-  HomeOutlined
+  StarOutlined
 } from "@ant-design/icons";
-
+// import {AdminList, FoodList, Main, OrderList, ShopList, UserList} from '../../router'
 import './index.scss'
 
 const {Sider, Header, Content, Footer} = Layout
@@ -18,11 +19,7 @@ const {SubMenu} = Menu
 export default function Home() {
 
   const [collapsed, setCollapsed] = useState(false)
-  const [openKeys, setOpenKyes] = useState(['index'])
-
-  function handleClick(e: Record<string, any>) {
-    console.log(e)
-  }
+  const navigate = useNavigate() // 点击的路由跳转
 
   return (
     <Layout style={{minHeight: '100vh'}}>
@@ -30,14 +27,16 @@ export default function Home() {
         setCollapsed(collapsed)
       }} width={300}>
         <div className='logo'></div>
-        <Menu theme="dark" mode="inline" onClick={handleClick} defaultOpenKeys={openKeys}>
-          <Menu.Item key='index' icon={<HomeOutlined />}>首页</Menu.Item>
+        <Menu theme="dark" mode="inline" onClick={(e) => {
+          navigate(`${e.key}`)
+        }}>
+          <Menu.Item key='main' icon={<HomeOutlined/>}>首页</Menu.Item>
           <SubMenu key="sub1" icon={<SnippetsOutlined/>} title='数据管理'>
-            <Menu.Item key='1'>用户列表</Menu.Item>
-            <Menu.Item key='2'>商家列表</Menu.Item>
-            <Menu.Item key='3'>订单列表</Menu.Item>
-            <Menu.Item key='4'>食品列表</Menu.Item>
-            <Menu.Item key='5'>管理员列表</Menu.Item>
+            <Menu.Item key='user'>用户列表</Menu.Item>
+            <Menu.Item key='shop'>商家列表</Menu.Item>
+            <Menu.Item key='order'>订单列表</Menu.Item>
+            <Menu.Item key='food'>食品列表</Menu.Item>
+            <Menu.Item key='admin'>管理员列表</Menu.Item>
           </SubMenu>
           <SubMenu key="sub2" icon={<PlusOutlined/>} title='添加数据'>
             <Menu.Item key='6'>添加商铺</Menu.Item>
@@ -65,7 +64,7 @@ export default function Home() {
             {/* <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
           </Breadcrumb>
           <div className='site-layout-background' style={{padding: 24, height: '100%'}}>
-            Bill is a cat
+            <Outlet/>
           </div>
         </Content>
         <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
