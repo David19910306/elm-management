@@ -6,7 +6,8 @@ import {
   PlusOutlined,
   SettingOutlined,
   SnippetsOutlined,
-  StarOutlined
+  StarOutlined,
+  HomeOutlined
 } from "@ant-design/icons";
 
 import './index.scss'
@@ -17,6 +18,7 @@ const {SubMenu} = Menu
 export default function Home() {
 
   const [collapsed, setCollapsed] = useState(false)
+  const [openKeys, setOpenKyes] = useState(['index'])
 
   function handleClick(e: Record<string, any>) {
     console.log(e)
@@ -28,7 +30,8 @@ export default function Home() {
         setCollapsed(collapsed)
       }} width={300}>
         <div className='logo'></div>
-        <Menu theme="dark" mode="inline" onClick={handleClick}>
+        <Menu theme="dark" mode="inline" onClick={handleClick} defaultOpenKeys={openKeys}>
+          <Menu.Item key='index' icon={<HomeOutlined />}>首页</Menu.Item>
           <SubMenu key="sub1" icon={<SnippetsOutlined/>} title='数据管理'>
             <Menu.Item key='1'>用户列表</Menu.Item>
             <Menu.Item key='2'>商家列表</Menu.Item>
@@ -58,8 +61,8 @@ export default function Home() {
         <Header className='site-layout-background' style={{padding: 0}}></Header>
         <Content style={{margin: '0 16px'}}>
           <Breadcrumb style={{margin: '16px 0'}}>
-            <Breadcrumb.Item>User</Breadcrumb.Item>
-            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+            <Breadcrumb.Item>首页</Breadcrumb.Item>
+            {/* <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
           </Breadcrumb>
           <div className='site-layout-background' style={{padding: 24, height: '100%'}}>
             Bill is a cat
