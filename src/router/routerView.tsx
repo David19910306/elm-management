@@ -26,16 +26,16 @@ export default function RouterView(props: IRouteViewProps) {
               <Route
                 key={index}
                 path={item.path as string}
-                render={(props: any) => {
-                  return (
-                    item.component && (
-                      <item.component
-                        children={item.children}
-                        {...props}
-                      ></item.component>
-                    )
-                  );
-                }}
+                // render={(props: any) => {
+                //   return (
+                //     item.component && (
+                //       <item.component
+                //         children={item.children}
+                //         {...props}
+                //       ></item.component>
+                //     )
+                //   );
+                // }}
               ></Route>
             </Routes>
           );

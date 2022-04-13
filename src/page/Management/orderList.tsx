@@ -1,8 +1,8 @@
 import React from 'react'
 
-export default function OrderLit() {
+export default function OrderList() {
 
   return (
-    <div>OrderLit</div>
+    <div>OrderList</div>
   )
 }

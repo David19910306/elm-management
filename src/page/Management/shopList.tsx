@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ShopLit() {
+export default function ShopList() {
 
   return (
     <div>ShopList</div>

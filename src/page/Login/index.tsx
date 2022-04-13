@@ -19,14 +19,14 @@ export default function Login(): JSX.Element {
     const result = await login().login('/api/admin/login', 'POST', value)
     const data: responseDataType = result.data
     // 登录成功 --> 跳转到首页
-    data.status === 1 ? navigate('/index') : setLoginStatus(data.status === 0)
+    data.status === 1 ? navigate('/index/*') : setLoginStatus(data.status === 0)
   }
 
   return (
     <div style={{backgroundColor: '#333', height: '100%', overflow: 'hidden'}}>
       <Particles id='login-particles' params={params}/>
       <div className='login'>
-        <h2 style={{fontSize: '34px', color: '#fff'}}>elm后台管理系统</h2>
+        <h2>elm后台管理系统</h2>
         <div className='login-form'>
           <Form className='el-form' onFinish={onFinish} name='basic'>
             <Form.Item name='user_name' rules={[{required: true, message: 'Please input your username!'}]}>

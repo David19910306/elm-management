@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import {Breadcrumb, Layout, Menu} from "antd";
-import {Outlet, useNavigate} from 'react-router-dom'
+import {Breadcrumb, Layout, Menu, Spin} from "antd";
+import {Navigate, Outlet, Route, Routes, useNavigate} from 'react-router-dom'
 import {
   EditOutlined,
   ExclamationCircleFilled,
@@ -10,8 +10,9 @@ import {
   SnippetsOutlined,
   StarOutlined
 } from "@ant-design/icons";
-// import {AdminList, FoodList, Main, OrderList, ShopList, UserList} from '../../router'
+import {AdminList, FoodList, Main, OrderList, ShopList, UserList} from "@/router";
 import './index.scss'
+import { Suspense } from 'react';
 
 const {Sider, Header, Content, Footer} = Layout
 const {SubMenu} = Menu
@@ -27,7 +28,7 @@ export default function Home() {
         setCollapsed(collapsed)
       }} width={300}>
         <div className='logo'></div>
-        <Menu theme="dark" mode="inline" onClick={(e) => {
+        <Menu theme="dark" mode="inline" onSelect={e => {
           navigate(`${e.key}`)
         }}>
           <Menu.Item key='main' icon={<HomeOutlined/>}>首页</Menu.Item>
@@ -64,7 +65,17 @@ export default function Home() {
             {/* <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
           </Breadcrumb>
           <div className='site-layout-background' style={{padding: 24, height: '100%'}}>
-            <Outlet/>
+            <Suspense fallback={<div className='loading-Container'><Spin/></div>}>
+              <Routes>
+                <Route path='main' element={<Main/>}/>
+                <Route path='user' element={<UserList/>}/>
+                <Route path='shop' element={<ShopList/>}/>
+                <Route path='order' element={<OrderList/>}/>
+                <Route path='food' element={<FoodList/>}/>
+                <Route path='admin' element={<AdminList/>}/>
+                <Route path='' element={<Navigate to='main' />}/>
+              </Routes>
+            </Suspense>
           </div>
         </Content>
         <Footer style={{textAlign: 'center'}}>Ant Design ©2018 Created by Ant UED</Footer>
