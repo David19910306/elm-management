@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, {Suspense, useState} from 'react'
 import {Breadcrumb, Layout, Menu, Spin} from "antd";
-import {Navigate, Outlet, Route, Routes, useNavigate} from 'react-router-dom'
+import {Navigate, Route, Routes, useNavigate} from 'react-router-dom'
 import {
   EditOutlined,
   ExclamationCircleFilled,
@@ -12,7 +12,6 @@ import {
 } from "@ant-design/icons";
 import {AdminList, FoodList, Main, OrderList, ShopList, UserList} from "@/router";
 import './index.scss'
-import { Suspense } from 'react';
 
 const {Sider, Header, Content, Footer} = Layout
 const {SubMenu} = Menu
@@ -27,8 +26,9 @@ export default function Home() {
       <Sider collapsible collapsed={collapsed} onCollapse={collapsed => {
         setCollapsed(collapsed)
       }} width={300}>
-        <div className='logo'></div>
+        <div className='logo'><img src='https://img.alicdn.com/tfs/TB10aMXfaNj0u4jSZFyXXXgMVXa-500-128.svg'/></div>
         <Menu theme="dark" mode="inline" onSelect={e => {
+          console.log(e)
           navigate(`${e.key}`)
         }}>
           <Menu.Item key='main' icon={<HomeOutlined/>}>首页</Menu.Item>
@@ -62,7 +62,7 @@ export default function Home() {
         <Content style={{margin: '0 16px'}}>
           <Breadcrumb style={{margin: '16px 0'}}>
             <Breadcrumb.Item>首页</Breadcrumb.Item>
-            {/* <Breadcrumb.Item>Bill</Breadcrumb.Item> */}
+            <Breadcrumb.Item>Bill</Breadcrumb.Item>
           </Breadcrumb>
           <div className='site-layout-background' style={{padding: 24, height: '100%'}}>
             <Suspense fallback={<div className='loading-Container'><Spin/></div>}>
@@ -73,7 +73,7 @@ export default function Home() {
                 <Route path='order' element={<OrderList/>}/>
                 <Route path='food' element={<FoodList/>}/>
                 <Route path='admin' element={<AdminList/>}/>
-                <Route path='' element={<Navigate to='main' />}/>
+                <Route path='' element={<Navigate to='main'/>}/>
               </Routes>
             </Suspense>
           </div>

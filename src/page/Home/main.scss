@@ -1,0 +1,48 @@
+.main-container {
+  width: 100%;
+  height: 100%;
+
+  h2 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+
+  .statisticsNumber {
+    .row-statistics {
+      text-align: center;
+      font-weight: 400;
+      margin: 10px 0;
+
+      .title-col {
+        color: #fff;
+        background-color: #ff9800;
+        padding: 8px 0;
+        font-size: 20px;
+        border-radius: 5px;
+      }
+
+      .whole-col {
+        color: #fff;
+        background-color: #20a0ff;
+        padding: 8px 0;
+        font-size: 20px;
+        border-radius: 5px;
+      }
+
+      .data-col {
+        color: #666;
+        background-color: #e5e9f2;
+        margin: 0 20px;
+        font-size: 14px;
+        border-radius: 5px;
+
+        span {
+          color: #333;
+          font-size: 26px;
+          line-height: 47.43px;
+        }
+      }
+    }
+  }
+}
