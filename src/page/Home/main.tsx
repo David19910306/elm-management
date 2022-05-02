@@ -1,15 +1,26 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Col, Row} from "antd";
 import * as echarts from "echarts";
 import EchartsComponent from "@/components/echarts";
 import './main.scss'
+import {getLately7Days} from "@/utils";
 
 type EChartsOptions = echarts.EChartsOption
 
 export default function Main() {
+
+  // 获取x轴的最近7天的日期
+  const [lastDate, setDate] = useState<string[]>([])
+
+  // 组件加载后自动获取
+  useEffect(() => {
+    const lately7days = getLately7Days()
+    setDate(lately7days)
+  }, [])
+
   const options: EChartsOptions = {
     title: {
-      text: 'Temperature Change in the Coming Week'
+      text: '走势图'
     },
     tooltip: {
       trigger: 'axis'
@@ -30,56 +41,61 @@ export default function Main() {
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      data: lastDate
     },
-    yAxis: {
+    yAxis: [{
       type: 'value',
+      name: '用户',
+      position: 'left',
+      min: 0,
+      max: 200,
+      interval: 50,
       axisLabel: {
-        formatter: '{value} °C'
+        formatter: '{value}'
+      },
+      axisLine: {
+        show: true
       }
-    },
+    }, {
+      type: 'value',
+      name: '订单',
+      position: 'right',
+      min: 0,
+      max: 200,
+      interval: 50,
+      axisLabel: {
+        formatter: '{value}'
+      },
+      axisLine: {
+        show: true
+      }
+    }],
     series: [
       {
-        name: 'Highest',
+        name: '新注册用户',
         type: 'line',
-        data: [10, 11, 13, 11, 12, 12, 9],
+        data: [39, 20, 15, 20, 9, 6, 0],
         markPoint: {
           data: [
             {type: 'max', name: 'Max'},
             {type: 'min', name: 'Min'}
           ]
-        },
-        markLine: {
-          data: [{type: 'average', name: 'Avg'}]
         }
       },
       {
-        name: 'Lowest',
+        name: '新增订单',
         type: 'line',
-        data: [1, -2, 2, 5, 3, 2, 0],
+        data: [6, 8, 15, 127, 11, 2, 0],
         markPoint: {
-          data: [{name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}]
-        },
-        markLine: {
-          data: [
-            {type: 'average', name: 'Avg'},
-            [
-              {
-                symbol: 'none',
-                x: '90%',
-                yAxis: 'max'
-              },
-              {
-                symbol: 'circle',
-                label: {
-                  position: 'start',
-                  formatter: 'Max'
-                },
-                type: 'max',
-                name: '最高点'
-              }
-            ]
-          ]
+          data: [{name: '周最高', type: 'max'}]
+        }
+      },
+      {
+        name: '新增管理员',
+        type: 'line',
+        data: [65, 63, 73, 55, 30, 25, 7],
+        markPoint: {
+          data: [{name: '周最高', type: 'max'}, {name: '周最低', type: 'min'}]
         }
       }
     ]

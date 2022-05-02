@@ -1,11 +1,7 @@
-import React, { Fragment, Suspense } from 'react';
-import { Spin } from 'antd';
+import React, {Fragment} from 'react';
 import Login from '../src/page/Login'
 import Home from "./page/Home";
 import {Navigate, Route, Routes} from 'react-router-dom';
-
-import RouterView from './router/routerView';
-import elements from '../src/router';
 
 import './App.scss'
 
@@ -19,7 +15,7 @@ export default function App() {
       {/*{element}*/}
       <Routes>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/index/*' element={<Home/>} />
+        <Route path='/index/*' element={<Home/>}/>
         <Route path='/' element={<Navigate to='/login'/>}/>
       </Routes>
     </Fragment>

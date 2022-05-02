@@ -19,7 +19,7 @@ export default function Login(): JSX.Element {
     const result = await login().login('/api/admin/login', 'POST', value)
     const data: responseDataType = result.data
     // 登录成功 --> 跳转到首页
-    data.status === 1 ? navigate('/index/*') : setLoginStatus(data.status === 0)
+    data.status === 1 ? navigate('/index/main') : setLoginStatus(data.status === 0)
   }
 
   return (
