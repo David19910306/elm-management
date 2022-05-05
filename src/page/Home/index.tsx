@@ -13,7 +13,7 @@ import {
 import {AdminList, FoodList, Main, OrderList, ShopList, UserList} from "@/router";
 import './index.scss'
 
-const {Sider, Header, Content, Footer} = Layout
+const {Sider, Content, Footer} = Layout
 const {SubMenu} = Menu
 
 export default function Home() {
@@ -26,7 +26,7 @@ export default function Home() {
       <Sider collapsible collapsed={collapsed} onCollapse={collapsed => {
         setCollapsed(collapsed)
       }} width={300}>
-        <div className='logo'><img src='https://img.alicdn.com/tfs/TB10aMXfaNj0u4jSZFyXXXgMVXa-500-128.svg'/></div>
+        <div className='logo'><img src='https://img.alicdn.com/tfs/TB10aMXfaNj0u4jSZFyXXXgMVXa-500-128.svg' alt=""/></div>
         <Menu theme="dark" mode="inline" onSelect={e => {
           console.log(e)
           navigate(`${e.key}`)
@@ -58,7 +58,7 @@ export default function Home() {
         </Menu>
       </Sider>
       <Layout className='site-layout'>
-        <Header className='site-layout-background' style={{padding: 0}}></Header>
+        {/* <Header className='site-layout-background' style={{padding: 0}}></Header> */}
         <Content style={{margin: '0 16px'}}>
           <Breadcrumb style={{margin: '16px 0'}}>
             <Breadcrumb.Item>首页</Breadcrumb.Item>

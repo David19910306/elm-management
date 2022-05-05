@@ -64,13 +64,13 @@ export default function UserList() {
 
   return (
     <Table columns={columns} loading={loading}
-           pagination={{
-             position: ['bottomLeft'],
-             showTotal: showTotal(total),
-             pageSize: 20,
-             total,
-             onChange
-           }}
-           dataSource={dataSource}/>
+          pagination={{
+            position: ['bottomLeft'],
+            showTotal: showTotal(total),
+            pageSize: 20,
+            total,
+            onChange
+          }}
+          dataSource={dataSource}/>
   )
 }
