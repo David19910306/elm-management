@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Table } from 'antd'
+import React, {useEffect, useState} from 'react'
+import {Button, Table} from 'antd'
 import httpRequest from '@/api'
-import { DownOutlined, RightOutlined } from '@ant-design/icons'
+import {DownOutlined, RightOutlined} from '@ant-design/icons'
 import ShopDetail from '@/components/shopDetail'
 import ShopDialog from '@/components/dialog'
-import Option from '@/interface/options'
 
 export default function ShopList() {
 
@@ -15,7 +14,6 @@ export default function ShopList() {
   const [currentPage, setCurrentPage] = useState(1) // 当前的页数，默认为第一页
   const [isModalVisible, setIsModalVisible] = useState(false) // 设置对话框的显示和隐藏
   const [currentRecord, setCurrentRecord] = useState({}) // 当前点击的行
-  const [options, setOptions] = useState<Option[]>([]) // 下拉框中的选项
 
   const columns = [{
     title: <strong>序号</strong>,
@@ -38,18 +36,20 @@ export default function ShopList() {
     title: <strong>操作</strong>,
     dataIndex: 'operation',
     key: 'operation',
-    render: (_:string, record: Record<string, any>) => {
+    render: (_: string, record: Record<string, any>) => {
       return (
         <div>
-          <Button size='small' style={{fontSize:'12px'}} onClick={() => {setMyModalVisible(record)}}>编辑</Button>&nbsp;&nbsp;
-          <Button size='small' style={{fontSize:'12px'}}>添加食品</Button>&nbsp;&nbsp;
-          <Button size='small' type='primary' danger style={{fontSize:'12px'}}>删除</Button>
+          <Button size='small' style={{fontSize: '12px'}} onClick={() => {
+            setMyModalVisible(record)
+          }}>编辑</Button>&nbsp;&nbsp;
+          <Button size='small' style={{fontSize: '12px'}}>添加食品</Button>&nbsp;&nbsp;
+          <Button size='small' type='primary' danger style={{fontSize: '12px'}}>删除</Button>
         </div>
       )
     }
   }]
 
-  function setMyModalVisible(record:Record<string, any>){
+  function setMyModalVisible(record: Record<string, any>) {
     setIsModalVisible(true)
     setCurrentRecord(record)
   }
@@ -70,31 +70,20 @@ export default function ShopList() {
 
     // 获取更新的商铺列表
     if (city) {
-      httpRequest('/api/shopping/restaurants', 'GET', {latitude: `${city.latitude}`, longitude: `${city.longitude}`, offset: 0, limit: 20}).then(response => {
+      httpRequest('/api/shopping/restaurants', 'GET', {
+        latitude: `${city.latitude}`,
+        longitude: `${city.longitude}`,
+        offset: 0,
+        limit: 20
+      }).then(response => {
         setLoading(false)
         setDataSource(response.data.map((data: Record<string, any>) => ({key: data.id, ...data})))
       })
     }
 
-    // 获取餐馆种类
-    httpRequest('/api/shopping/v2/restaurant/category', 'GET').then(response => {
-      response.status === 200 && setOptions(response.data.map((option:Record<string, any>) => {
-        return {
-          value: option.name,
-          label: option.name,
-          children: option.sub_categories.map((sub:Record<string, any>) => {
-            return {
-              value: sub.name,
-              label: sub.name
-            }
-          })
-        }
-      }))
-    })
-
   }, [])
 
-  function showTotal(total:number) {
+  function showTotal(total: number) {
     // console.log(total)
     return () => `共 ${total} 条`
   }
@@ -103,7 +92,12 @@ export default function ShopList() {
   async function onChange(page: number, pageSize: number) {
     setLoading(true)
     setCurrentPage(page)
-    const result = await httpRequest('/api/shopping/restaurants', 'GET', {latitude: `${city.latitude}`, longitude: `${city.longitude}`, offset: (page - 1) * 20, limit: pageSize})
+    const result = await httpRequest('/api/shopping/restaurants', 'GET', {
+      latitude: `${city.latitude}`,
+      longitude: `${city.longitude}`,
+      offset: (page - 1) * 20,
+      limit: pageSize
+    })
     // console.log(result)
     if (result.status === 200) {
       setLoading(false)
@@ -114,30 +108,31 @@ export default function ShopList() {
   return (
     <>
       <Table columns={columns} loading={loading}
-          pagination={{
-            position: ['bottomLeft'],
-            showTotal: showTotal(total),
-            pageSize: 20,
-            total,
-            onChange
-          }}
-          expandable={{
-            expandIcon: ({expanded, onExpand, record}) =>
-              expanded?
-              <DownOutlined onClick={e => onExpand(record, e)}/>:
-              <RightOutlined onClick={e => onExpand(record, e)}/>,
-            expandedRowRender: record => <ShopDetail record={record} />
-          }}
-          dataSource={dataSource}/>
+             pagination={{
+               position: ['bottomLeft'],
+               showTotal: showTotal(total),
+               pageSize: 20,
+               total,
+               onChange
+             }}
+             expandable={{
+               expandIcon: ({expanded, onExpand, record}) =>
+                 expanded ?
+                   <DownOutlined onClick={e => onExpand(record, e)}/> :
+                   <RightOutlined onClick={e => onExpand(record, e)}/>,
+               expandedRowRender: record => <ShopDetail record={record}/>
+             }}
+             dataSource={dataSource}/>
 
       {
-        isModalVisible && currentRecord && options.length > 0?
-        <ShopDialog 
-          isModalVisible={isModalVisible} 
-          setModalVisible={(visible: boolean) => {setIsModalVisible(visible)}}
-          record={currentRecord}
-          myOptions={options}
-        />: <></>
+        isModalVisible && currentRecord ?
+          <ShopDialog
+            isModalVisible={isModalVisible}
+            setModalVisible={(visible: boolean) => {
+              setIsModalVisible(visible)
+            }}
+            record={currentRecord}
+          /> : <></>
       }
     </>
   )
