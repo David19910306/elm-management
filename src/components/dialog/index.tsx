@@ -1,31 +1,10 @@
-import httpRequest from '@/api'
-import Option from '@/interface/options'
 import IProps from '@/interface/props'
 import { Cascader, Form, Image, Input, Modal } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 export default function ShopDialog(props: IProps) {
-
-  const [options, setOptions] = useState<Option[]>([]) // 下拉框中的选项
-
-  useEffect(() => {
-    httpRequest('/api/shopping/v2/restaurant/category', 'GET').then(response => {
-      console.log(response)
-      response.status === 200 && setOptions(response.data.map((option:Record<string, any>) => {
-        return {
-          value: option.id,
-          label: option.name,
-          isLeaf: option.sub_categories.length === 0,
-          children: option.sub_categories.map((sub:Record<string, any>) => {
-            return {
-              value: sub.id,
-              label: sub.name
-            }
-          })
-        }
-      }))
-    })
-  }, [])
+  const {record, myOptions}  = props
+  const array = record? record.category.split('/'): []
 
   // 对话框确定
   function handleOk() {
@@ -37,16 +16,8 @@ export default function ShopDialog(props: IProps) {
     props.setModalVisible && props.setModalVisible(false)
   }
 
-  // 数据加载
-  // function loadData(){
-  //
-  // }
-
-  function onOptionsChange() {
-
-  }
-
-  return <Modal
+  console.log(record, myOptions)
+  return myOptions?.length !== 0 && record? <Modal
       visible={props.isModalVisible}
       title={<strong>修改店铺信息</strong>}
       onOk={handleOk}
@@ -55,6 +26,13 @@ export default function ShopDialog(props: IProps) {
     >
       <Form
         name="shopDetail"
+        initialValues={{
+          name: record.name,
+          address: record.address,
+          description: record.description,
+          phone: record.phone,
+          category: array
+        }}
       >
         <Form.Item
           label="店铺名称"
@@ -65,18 +43,18 @@ export default function ShopDialog(props: IProps) {
         <Form.Item label="详细地址" name="address" extra={<span style={{marginTop: '15px'}}>当前城市：深圳</span>}>
           <Input />
         </Form.Item>
-        <Form.Item label="店铺介绍" name="introduction">
+        <Form.Item label="店铺介绍" name="description">
           <Input />
         </Form.Item>
         <Form.Item label="联系电话" name="phone">
           <Input />
         </Form.Item>
-        <Form.Item label="店铺分类" name="category" style={{width: '250px'}}>
-          <Cascader options={options} onChange={onOptionsChange} changeOnSelect />
+        <Form.Item label="店铺分类" name="category" style={{width: '275px'}}>
+          <Cascader options={myOptions} />
         </Form.Item>
         <Form.Item label="商铺图片" name="image">
-          <Image width={200} src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"/>
+          <Image width={200} src={`https://elm.cangdu.org/img/${record? record.image_path: ''}`}/>
         </Form.Item>
       </Form>
-    </Modal>
+    </Modal>: <></>
 }

@@ -4,6 +4,7 @@ import httpRequest from '@/api'
 import { DownOutlined, RightOutlined } from '@ant-design/icons'
 import ShopDetail from '@/components/shopDetail'
 import ShopDialog from '@/components/dialog'
+import Option from '@/interface/options'
 
 export default function ShopList() {
 
@@ -13,6 +14,8 @@ export default function ShopList() {
   const [city, setCity] = useState<Record<string, any>>({}) // 当前城市
   const [currentPage, setCurrentPage] = useState(1) // 当前的页数，默认为第一页
   const [isModalVisible, setIsModalVisible] = useState(false) // 设置对话框的显示和隐藏
+  const [currentRecord, setCurrentRecord] = useState({}) // 当前点击的行
+  const [options, setOptions] = useState<Option[]>([]) // 下拉框中的选项
 
   const columns = [{
     title: <strong>序号</strong>,
@@ -35,16 +38,21 @@ export default function ShopList() {
     title: <strong>操作</strong>,
     dataIndex: 'operation',
     key: 'operation',
-    render: (_:string) => {
+    render: (_:string, record: Record<string, any>) => {
       return (
         <div>
-          <Button size='small' style={{fontSize:'12px'}} onClick={() => {setIsModalVisible(true)}}>编辑</Button>&nbsp;&nbsp;
+          <Button size='small' style={{fontSize:'12px'}} onClick={() => {setMyModalVisible(record)}}>编辑</Button>&nbsp;&nbsp;
           <Button size='small' style={{fontSize:'12px'}}>添加食品</Button>&nbsp;&nbsp;
           <Button size='small' type='primary' danger style={{fontSize:'12px'}}>删除</Button>
         </div>
       )
     }
   }]
+
+  function setMyModalVisible(record:Record<string, any>){
+    setIsModalVisible(true)
+    setCurrentRecord(record)
+  }
 
   useEffect(() => {
     setLoading(true)
@@ -67,6 +75,22 @@ export default function ShopList() {
         setDataSource(response.data.map((data: Record<string, any>) => ({key: data.id, ...data})))
       })
     }
+
+    // 获取餐馆种类
+    httpRequest('/api/shopping/v2/restaurant/category', 'GET').then(response => {
+      response.status === 200 && setOptions(response.data.map((option:Record<string, any>) => {
+        return {
+          value: option.name,
+          label: option.name,
+          children: option.sub_categories.map((sub:Record<string, any>) => {
+            return {
+              value: sub.name,
+              label: sub.name
+            }
+          })
+        }
+      }))
+    })
 
   }, [])
 
@@ -107,7 +131,13 @@ export default function ShopList() {
           dataSource={dataSource}/>
 
       {
-        isModalVisible && <ShopDialog isModalVisible={isModalVisible} setModalVisible={(visible: boolean) => {setIsModalVisible(visible)}} />
+        isModalVisible && currentRecord && options.length > 0?
+        <ShopDialog 
+          isModalVisible={isModalVisible} 
+          setModalVisible={(visible: boolean) => {setIsModalVisible(visible)}}
+          record={currentRecord}
+          myOptions={options}
+        />: <></>
       }
     </>
   )

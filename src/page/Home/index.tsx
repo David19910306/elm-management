@@ -28,7 +28,6 @@ export default function Home() {
       }} width={300}>
         <div className='logo'><img src='https://img.alicdn.com/tfs/TB10aMXfaNj0u4jSZFyXXXgMVXa-500-128.svg' alt=""/></div>
         <Menu theme="dark" mode="inline" onSelect={e => {
-          console.log(e)
           navigate(`${e.key}`)
         }}>
           <Menu.Item key='main' icon={<HomeOutlined/>}>首页</Menu.Item>
