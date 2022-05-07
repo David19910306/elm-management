@@ -4,16 +4,19 @@ import httpRequest from '@/api'
 import {DownOutlined, RightOutlined} from '@ant-design/icons'
 import ShopDetail from '@/components/shopDetail'
 import ShopDialog from '@/components/dialog'
+import { useNavigate } from 'react-router-dom'
+import info from '@/components/message'
 
 export default function ShopList() {
 
   const [dataSource, setDataSource] = useState([])
   const [total, setTotal] = useState(0) // 总的用户个数
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [city, setCity] = useState<Record<string, any>>({}) // 当前城市
   const [currentPage, setCurrentPage] = useState(1) // 当前的页数，默认为第一页
   const [isModalVisible, setIsModalVisible] = useState(false) // 设置对话框的显示和隐藏
   const [currentRecord, setCurrentRecord] = useState({}) // 当前点击的行
+  const navigate = useNavigate()
 
   const columns = [{
     title: <strong>序号</strong>,
@@ -42,12 +45,20 @@ export default function ShopList() {
           <Button size='small' style={{fontSize: '12px'}} onClick={() => {
             setMyModalVisible(record)
           }}>编辑</Button>&nbsp;&nbsp;
-          <Button size='small' style={{fontSize: '12px'}}>添加食品</Button>&nbsp;&nbsp;
-          <Button size='small' type='primary' danger style={{fontSize: '12px'}}>删除</Button>
+          <Button size='small' style={{fontSize: '12px'}} onClick={() => {navigate('/index/7')}}>添加食品</Button>&nbsp;&nbsp;
+          <Button size='small' type='primary' danger style={{fontSize: '12px'}} onClick={() => {deleteFood(record.id)}}>删除</Button>
         </div>
       )
     }
   }]
+
+  // 删除店铺
+  async function deleteFood(delId:number){
+    const deleteResult = await httpRequest(`/api/shopping/restaurant/${delId}`, 'DELETE')
+    // console.log(deleteResult)
+    const {data} = deleteResult
+    info(data)
+  }
 
   function setMyModalVisible(record: Record<string, any>) {
     setIsModalVisible(true)
@@ -76,8 +87,8 @@ export default function ShopList() {
         offset: 0,
         limit: 20
       }).then(response => {
-        setLoading(false)
         setDataSource(response.data.map((data: Record<string, any>) => ({key: data.id, ...data})))
+        setLoading(false)
       })
     }
 
@@ -100,8 +111,8 @@ export default function ShopList() {
     })
     // console.log(result)
     if (result.status === 200) {
-      setLoading(false)
       setDataSource(result.data.map((data: Record<string, any>) => ({key: data.id, ...data})))
+      setLoading(false)
     }
   }
 
